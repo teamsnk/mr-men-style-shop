@@ -3,15 +3,19 @@ import { ProductCard } from "@/components/site/ProductCard";
 import { CATEGORIES, PRODUCTS, categoryName, type Category } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
-type Search = { category?: Category; q?: string; sort?: "featured" | "price-asc" | "price-desc" | "new"; size?: string };
+type Sort = "featured" | "price-asc" | "price-desc" | "new";
+type Search = { category?: Category | undefined; q?: string | undefined; sort?: Sort | undefined; size?: string | undefined };
 
 export const Route = createFileRoute("/shop")({
-  validateSearch: (s: Record<string, unknown>): Search => ({
-    category: CATEGORIES.some((c) => c.slug === s.category) ? (s.category as Category) : undefined,
-    q: typeof s.q === "string" && s.q ? s.q : undefined,
-    sort: ["featured", "price-asc", "price-desc", "new"].includes(s.sort as string) ? (s.sort as Search["sort"]) : undefined,
-    size: typeof s.size === "string" && s.size ? s.size : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): Search => {
+    const c = s["category"], q = s["q"], so = s["sort"], z = s["size"];
+    return {
+      category: CATEGORIES.some((x) => x.slug === c) ? (c as Category) : undefined,
+      q: typeof q === "string" && q ? q : undefined,
+      sort: ["featured", "price-asc", "price-desc", "new"].includes(so as string) ? (so as Sort) : undefined,
+      size: typeof z === "string" && z ? z : typeof z === "number" ? String(z) : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Shop Men's Clothing — MR. MEN" },

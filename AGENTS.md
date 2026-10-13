@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- All routes are prerendered to static HTML (list built in vite.config.ts) and deployed to GitHub Pages via .github/workflows/deploy-pages.yml — the custom domain is served by GitHub Pages, not a server.

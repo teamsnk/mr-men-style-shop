@@ -1,0 +1,47 @@
+name: Deploy MR. MEN to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      # LOVABLE_SANDBOX=1 turns on the static prerender pass of
+      # @lovable.dev/vite-tanstack-config so every page is written as HTML.
+      - run: bun run build
+        env:
+          LOVABLE_SANDBOX: "1"
+      - name: Prepare static site
+        run: |
+          test -f dist/client/index.html || (echo "Prerender produced no index.html" && exit 1)
+          cp CNAME dist/client/CNAME
+          touch dist/client/.nojekyll
+          cp dist/client/index.html dist/client/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/client
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
