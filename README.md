@@ -1,29 +1,23 @@
-# Welcome to your Lovable project
+# MR. MEN — Storefront
 
-This project was built with [Lovable](https://lovable.dev).
+Premium menswear storefront for MR. MEN (Bangladesh). Built with React, TypeScript, TanStack Start, Tailwind CSS v4 and shadcn/ui.
 
-## Build with Lovable
-
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+## Run locally
+```bash
+bun install   # or npm install
+bun run dev   # http://localhost:8080
+bunx vitest run
 ```
 
-## Built with
+## Deploy via GitHub
+1. In Lovable, connect GitHub (Settings → GitHub) to sync this repo.
+2. Build: `bun run build`. Deploy to any host supporting the build output (Cloudflare Pages/Workers, Netlify, Vercel).
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+### Static hosting notes
+- The app uses server rendering by default. For pure static hosting, enable prerendering in `vite.config.ts` (`tanstackStart.prerender`) and list static pages (`/`, `/shop`, `/cart`, `/wishlist`, `/checkout`, `/account`, each `/product/<slug>` and `/policies/<slug>`).
+- Configure your host to fall back to the app for unknown routes.
+
+## Demo data & limitations
+- Products live in `src/lib/products.ts`; replace with a real catalogue/API later.
+- Bag and wishlist are stored in the browser (localStorage).
+- **Checkout is a demo.** No payment or order processing is connected.
