@@ -9,7 +9,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 // Every page is identical for all visitors (bag/wishlist live in the browser),
 // so all routes are prerendered to static HTML for static hosts like GitHub Pages.
-const productSlugs = [...readFileSync("src/lib/products.ts", "utf8").matchAll(/slug: "([a-z0-9-]+)", name:/g)].map((m) => m[1]);
+const productSlugs = [...readFileSync("src/lib/products.ts", "utf8").matchAll(/slug: "([a-z0-9-]+)", name: "[^"]+", category:/g)].map((m) => m[1]);
 const staticPaths = [
   "/", "/shop", "/cart", "/checkout", "/wishlist", "/account",
   ...["shipping", "returns", "privacy", "terms"].map((s) => `/policies/${s}`),
