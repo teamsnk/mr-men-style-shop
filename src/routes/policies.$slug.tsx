@@ -10,7 +10,7 @@ const POLICIES: Record<string, { title: string; body: string[] }> = {
 export const Route = createFileRoute("/policies/$slug")({
   loader: ({ params }) => { if (!POLICIES[params.slug]) throw notFound(); return { slug: params.slug }; },
   head: ({ loaderData }) => {
-    const t = `${loaderData ? POLICIES[loaderData.slug].title : "Policy"} — MR. MEN`;
+    const t = `${(loaderData && POLICIES[loaderData.slug]?.title) || "Policy"} — MR. MEN`;
     return { meta: [{ title: t }, { name: "description", content: `MR. MEN ${t}` }, { property: "og:title", content: t }, { property: "og:description", content: "Store policies." }] };
   },
   component: Policy,
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/policies/$slug")({
 function Policy() {
   const { slug } = Route.useLoaderData();
   const p = POLICIES[slug];
+  if (!p) return null;
   return (
     <div className="mx-auto max-w-2xl px-4 py-16">
       <h1 className="text-4xl md:text-5xl">{p.title}</h1>
